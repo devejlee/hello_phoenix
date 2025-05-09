@@ -10,6 +10,13 @@ defmodule HelloWeb.PageController do
     render(conn, :home, layout: false)
   end
 
+  # this shows the flash error
+  # def home(conn, _params) do
+  #   conn
+  #   |> put_flash(:error, "Let's pretend we have an error.")
+  #   |> render(:home, layout: false)
+  # end
+
   # this redirects to /redirect_test
   # def home(conn, _params) do
   #   redirect(conn, to: ~p"/redirect_test")
