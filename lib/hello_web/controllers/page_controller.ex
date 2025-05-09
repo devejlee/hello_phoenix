@@ -9,4 +9,13 @@ defmodule HelloWeb.PageController do
     # so skip the default app layout.
     render(conn, :home, layout: false)
   end
+
+  # this redirects to /redirect_test
+  # def home(conn, _params) do
+  #   redirect(conn, to: ~p"/redirect_test")
+  # end
+
+  # def redirect_test(conn, _params) do
+  #   render(conn, :home, layout: false)
+  # end
 end
