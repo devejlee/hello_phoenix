@@ -1,5 +1,10 @@
 <.header>
   My Cart
+  <:actions>
+    <.link href={~p"/orders"} method="post">
+      <.button>Complete order</.button>
+    </.link>
+  </:actions>
   <:subtitle :if={@cart.items == []}>Your cart is empty</:subtitle>
 </.header>
 
