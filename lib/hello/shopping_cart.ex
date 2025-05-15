@@ -77,14 +77,29 @@ defmodule Hello.ShoppingCart do
   def add_item_to_cart(%Cart{} = cart, product_id) do
     product = Catalog.get_product!(product_id)
 
-    %CartItem{quantity: 1, price_when_carted: product.price}
-    |> CartItem.changeset(%{})
-    |> Ecto.Changeset.put_assoc(:cart, cart)
-    |> Ecto.Changeset.put_assoc(:product, product)
-    |> Repo.insert(
-      on_conflict: [inc: [quantity: 1]],
-      conflict_target: [:cart_id, :product_id]
-    )
+    # Original add_item_to_cart function didn't work from tutorial, so used AI to fix
+    # First try to find an existing cart item
+    existing_item =
+      Repo.one(
+        from(i in CartItem,
+          where: i.cart_id == ^cart.id,
+          where: i.product_id == ^product_id
+        )
+      )
+
+    if existing_item do
+      # Update quantity if item exists
+      existing_item
+      |> CartItem.changeset(%{quantity: existing_item.quantity + 1})
+      |> Repo.update()
+    else
+      # Create new item if it doesn't exist
+      %CartItem{quantity: 1, price_when_carted: product.price}
+      |> CartItem.changeset(%{})
+      |> Ecto.Changeset.put_assoc(:cart, cart)
+      |> Ecto.Changeset.put_assoc(:product, product)
+      |> Repo.insert()
+    end
   end
 
   def remove_item_from_cart(%Cart{} = cart, product_id) do
