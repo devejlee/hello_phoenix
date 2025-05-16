@@ -57,6 +57,7 @@ defmodule HelloWeb.Router do
   # Other scopes may use custom stacks.
   scope "/api", HelloWeb do
     pipe_through :api
+    resources "/urls", UrlController, except: [:new, :edit]
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
