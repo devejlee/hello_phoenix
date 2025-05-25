@@ -17,18 +17,14 @@ defmodule HelloWeb.Router do
   end
 
   defp fetch_anonymous_user(conn, _) do
-    if conn.assigns[:current_user] do
-      conn
+    if user_uuid = get_session(conn, :current_uuid) do
+      assign(conn, :current_uuid, user_uuid)
     else
-      if user_uuid = get_session(conn, :current_uuid) do
-        assign(conn, :current_uuid, user_uuid)
-      else
-        new_uuid = Ecto.UUID.generate()
+      new_uuid = Ecto.UUID.generate()
 
-        conn
-        |> assign(:current_uuid, new_uuid)
-        |> put_session(:current_uuid, new_uuid)
-      end
+      conn
+      |> assign(:current_uuid, new_uuid)
+      |> put_session(:current_uuid, new_uuid)
     end
   end
 
