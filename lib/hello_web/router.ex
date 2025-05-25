@@ -10,20 +10,25 @@ defmodule HelloWeb.Router do
     plug :put_root_layout, html: {HelloWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug :fetch_current_user
     plug :fetch_anonymous_user
     plug :fetch_current_cart
     plug HelloWeb.Plugs.Locale, "en"
   end
 
   defp fetch_anonymous_user(conn, _) do
-    if user_uuid = get_session(conn, :current_uuid) do
-      assign(conn, :current_uuid, user_uuid)
-    else
-      new_uuid = Ecto.UUID.generate()
-
+    if conn.assigns[:current_user] do
       conn
-      |> assign(:current_uuid, new_uuid)
-      |> put_session(:current_uuid, new_uuid)
+    else
+      if user_uuid = get_session(conn, :current_uuid) do
+        assign(conn, :current_uuid, user_uuid)
+      else
+        new_uuid = Ecto.UUID.generate()
+
+        conn
+        |> assign(:current_uuid, new_uuid)
+        |> put_session(:current_uuid, new_uuid)
+      end
     end
   end
 

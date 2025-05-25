@@ -5,9 +5,12 @@ defmodule Hello.Repo.Migrations.CreateUsersAuthTables do
     execute "CREATE EXTENSION IF NOT EXISTS citext", ""
 
     create table(:users) do
+      add :name, :string
       add :email, :citext, null: false
       add :hashed_password, :string, null: false
       add :confirmed_at, :utc_datetime
+      add :bio, :string
+      add :number_of_pets, :integer
 
       timestamps(type: :utc_datetime)
     end
